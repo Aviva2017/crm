@@ -1,0 +1,24 @@
+<?php /* Smarty version Smarty-3.1.7, created on 2017-12-21 12:49:13
+         compiled from "/home/www/Aviva/includes/runtime/../../layouts/vlayout/modules/Users/Login.Default.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:13614429565a3badc95dae24-41820176%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+$_valid = $_smarty_tpl->decodeProperties(array (
+  'file_dependency' => 
+  array (
+    '165e81f3df613d10e949bdbfdd53bce53563d84b' => 
+    array (
+      0 => '/home/www/Aviva/includes/runtime/../../layouts/vlayout/modules/Users/Login.Default.tpl',
+      1 => 1513818489,
+      2 => 'file',
+    ),
+  ),
+  'nocache_hash' => '13614429565a3badc95dae24-41820176',
+  'function' => 
+  array (
+  ),
+  'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_5a3badc95fe33',
+),false); /*/%%SmartyHeaderCode%%*/?>
+<?php if ($_valid && !is_callable('content_5a3badc95fe33')) {function content_5a3badc95fe33($_smarty_tpl) {?>
+<!DOCTYPE html><html><head><title>Vtiger login page</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- for Login page we are added --><link href="libraries/bootstrap/css/bootstrap.min.css" rel="stylesheet"><link href="libraries/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"><link href="libraries/bootstrap/css/jqueryBxslider.css" rel="stylesheet" /><script src="libraries/jquery/jquery.min.js"></script><script src="libraries/jquery/boxslider/jqueryBxslider.js"></script><script src="libraries/jquery/boxslider/respond.min.js"></script></head><body><div class="container-fluid login-container"><div class="row-fluid"><div class="span3"></div><div class="span9"></div></div><div class="row-fluid"><div class="span12"><div class="content-wrapper"><div class="container-fluid"><div class="row-fluid"><div class="span6"><div class="carousal-container"></div></div><div class="span6"><div class="login-area"><div class="login-box" id="loginDiv"><div class=""><h3 class="login-header">登陆系统</h3></div><form class="form-horizontal login-form" style="margin:0;" action="index.php?module=Users&action=Login" method="POST"><?php if (isset($_REQUEST['error'])){?><div class="alert alert-error"><p>Invalid username or password.</p></div><?php }?><?php if (isset($_REQUEST['fpError'])){?><div class="alert alert-error"><p>请正确填写用户名和密码</p></div><?php }?><?php if (isset($_REQUEST['status'])){?><div class="alert alert-success"><p>邮件已经发送到你的邮箱，请查看邮件内容</p></div><?php }?><?php if (isset($_REQUEST['statusError'])){?><div class="alert alert-error"><p>系统未配置邮件服务器</p></div><?php }?><div class="control-group"><label class="control-label" for="username"><b>用户名</b></label><div class="controls"><input type="text" id="username" name="username" placeholder="用户名"></div></div><div class="control-group"><label class="control-label" for="password"><b>密码</b></label><div class="controls"><input type="password" id="password" name="password" placeholder="密码"></div></div><div class="control-group signin-button"><div class="controls" id="forgotPassword"><button type="submit" class="btn btn-primary sbutton">登录</button>&nbsp;&nbsp;&nbsp;<a>忘记密码？</a></div></div></form></div><div class="login-box hide" id="forgotPasswordDiv"><form class="form-horizontal login-form" style="margin:0;" action="forgotPassword.php" method="POST"><div class=""><h3 class="login-header">忘记密码</h3></div><div class="control-group"><label class="control-label" for="user_name"><b>用户名</b></label><div class="controls"><input type="text" id="user_name" name="user_name" placeholder="用户名"></div></div><div class="control-group"><label class="control-label" for="email"><b>邮箱</b></label><div class="controls"><input type="text" id="emailId" name="emailId"  placeholder="邮箱"></div></div><div class="control-group signin-button"><div class="controls" id="backButton"><input type="submit" class="btn btn-primary sbutton" value="提交" name="retrievePassword">&nbsp;&nbsp;&nbsp;<a>返回</a></div></div></form></div></div></div></div></div></div></div></div></div></body><script>jQuery(document).ready(function(){jQuery("#forgotPassword a").click(function() {jQuery("#loginDiv").hide();jQuery("#forgotPasswordDiv").show();});jQuery("#backButton a").click(function() {jQuery("#loginDiv").show();jQuery("#forgotPasswordDiv").hide();});jQuery("input[name='retrievePassword']").click(function (){var username = jQuery('#user_name').val();var email = jQuery('#emailId').val();var email1 = email.replace(/^\s+/,'').replace(/\s+$/,'');var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/ ;var illegalChars= /[\(\)\<\>\,\;\:\\\"\[\]]/ ;if(username == ''){alert('Please enter valid username');return false;} else if(!emailFilter.test(email1) || email == ''){alert('Please enater valid email address');return false;} else if(email.match(illegalChars)){alert( "The email address contains illegal characters.");return false;} else {return true;}});});</script></html>
+<?php }} ?>
