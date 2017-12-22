@@ -38,92 +38,99 @@ class PurchaseOrder_Record_Model extends Inventory_Record_Model
         foreach ($productlist as $i => $product) {
             $qty = $product['qty' . $i];
             $productId = $product['hdnProductId' . $i];
+            $listprice = round($product['listPrice' . $i], 2);
+            $discount_percent = round($product['discount_percent' . $i], 2);
+            $discount_amount = round($product['discount_amount' . $i], 2);
             if (empty($productId) || empty($qty))
                 continue;
 
+            $sql = 'SELECT pro.qtyinstock, procf.cf_753, procf.cf_755, procf.cf_757, procf.cf_751 FROM vtiger_products pro INNER JOIN vtiger_productcf procf ON procf.productid=pro.productid WHERE pro.productid=?';
+            $result = $db->pquery($sql, array($productId));
+            $stock0 = intval($db->query_result($result, 0, 'qtyinstock'));
+            $stock1 = intval($db->query_result($result, 0, 'cf_753'));
+            $stock2 = intval($db->query_result($result, 0, 'cf_755'));
+            $stock3 = intval($db->query_result($result, 0, 'cf_757'));
+            $costprice = floatval($db->query_result($result, 0, 'cf_751'));
+            $contractprice = $listprice;
+            if (!empty($discount_percent)) {
+                $contractprice = round($listprice * (1 - $discount_percent / 100), 2);
+            } elseif (!empty($discount_amount)) {
+                $contractprice = $listprice - $discount_amount;
+            }
+
             if ($type == 'In Stock') {
-                if($inStock == 'Stock-0'){
-                    $result = $db->pquery("SELECT qtyinstock FROM vtiger_products WHERE productid=?", array($productId));
-                    $_qty = $db->query_result($result,0,"qtyinstock");
-                    $_qty = empty($_qty)?0:intval($_qty);
-                    $stock = $_qty + $qty;
-                    $db->pquery("UPDATE vtiger_products SET qtyinstock=? WHERE productid=?", array($stock, $productId));
-                }else{
-                    if($inStock == 'Stock-1'){
+                if ($inStock == 'Stock-0') {
+                    $stock = $stock0 + $qty;
+                    $db->pquery('UPDATE vtiger_products SET qtyinstock=? WHERE productid=?', array($stock, $productId));
+                } else {
+                    if ($inStock == 'Stock-1') {
+                        $stock = $stock1 + $qty;
                         $field = 'cf_753';
-                    }elseif($inStock == 'Stock-2'){
+                    } elseif ($inStock == 'Stock-2') {
+                        $stock = $stock2 + $qty;
                         $field = 'cf_755';
-                    }else{
+                    } else {
+                        $stock = $stock3 + $qty;
                         $field = 'cf_757';
                     }
-                    $result = $db->pquery('SELECT '.$field.' FROM vtiger_productcf WHERE productid=?', array($productId));
-                    $_qty = $db->query_result($result,0,$field);
-                    $_qty = empty($_qty)?0:intval($_qty);
-                    $stock = $_qty + $qty;
-                    $db->pquery('UPDATE vtiger_productcf SET '.$field.'=? WHERE productid=?', array($stock, $productId));
+                    $db->pquery('UPDATE vtiger_productcf SET ' . $field . '=? WHERE productid=?', array($stock, $productId));
                 }
+
+                $_costprice = round(($costprice * ($stock0 + $stock1 + $stock2 + $stock3) + $contractprice * $qty) / ($stock0 + $stock1 + $stock2 + $stock3 + $qty), 2);
+                $db->pquery('UPDATE vtiger_productcf SET cf_751=? WHERE productid=?', array($_costprice, $productId));
             } elseif ($type == 'Out Stock') {
-                if($outStock == 'Stock-0'){
-                    $result = $db->pquery("SELECT qtyinstock FROM vtiger_products WHERE productid=?", array($productId));
-                    $_qty = $db->query_result($result,0,"qtyinstock");
-                    $_qty = empty($_qty)?0:intval($_qty);
-                    $stock = $_qty - $qty;
-                    $db->pquery("UPDATE vtiger_products SET qtyinstock=? WHERE productid=?", array($stock, $productId));
-                }else{
-                    if($inStock == 'Stock-1'){
+                if ($outStock == 'Stock-0') {
+                    $stock = $stock0 - $qty;
+                    $db->pquery('UPDATE vtiger_products SET qtyinstock=? WHERE productid=?', array($stock, $productId));
+                } else {
+                    if ($inStock == 'Stock-1') {
+                        $stock = $stock1 - $qty;
                         $field = 'cf_753';
-                    }elseif($inStock == 'Stock-2'){
+                    } elseif ($inStock == 'Stock-2') {
+                        $stock = $stock2 - $qty;
                         $field = 'cf_755';
-                    }else{
+                    } else {
+                        $stock = $stock3 - $qty;
                         $field = 'cf_757';
                     }
-                    $result = $db->pquery('SELECT '.$field.' FROM vtiger_productcf WHERE productid=?', array($productId));
-                    $_qty = $db->query_result($result,0,$field);
-                    $_qty = empty($_qty)?0:intval($_qty);
-                    $stock = $_qty - $qty;
-                    $db->pquery('UPDATE vtiger_productcf SET '.$field.'=? WHERE productid=?', array($stock, $productId));
+                    $db->pquery('UPDATE vtiger_productcf SET ' . $field . '=? WHERE productid=?', array($stock, $productId));
                 }
+
+                $_costprice = round(($costprice * ($stock0 + $stock1 + $stock2 + $stock3) - $contractprice * $qty) / ($stock0 + $stock1 + $stock2 + $stock3 - $qty), 2);
+                $db->pquery('UPDATE vtiger_productcf SET cf_751=? WHERE productid=?', array($_costprice, $productId));
             } elseif ($type == 'Adjust Stock') {
-                if($inStock != $outStock){
-                    if($inStock == 'Stock-0'){
-                        $result = $db->pquery("SELECT qtyinstock FROM vtiger_products WHERE productid=?", array($productId));
-                        $_qty = $db->query_result($result,0,"qtyinstock");
-                        $_qty = empty($_qty)?0:intval($_qty);
-                        $stock = $_qty + $qty;
-                        $db->pquery("UPDATE vtiger_products SET qtyinstock=? WHERE productid=?", array($stock, $productId));
-                    }else{
-                        if($inStock == 'Stock-1'){
+                if ($inStock != $outStock) {
+                    if ($inStock == 'Stock-0') {
+                        $stock = $stock0 + $qty;
+                        $db->pquery('UPDATE vtiger_products SET qtyinstock=? WHERE productid=?', array($stock, $productId));
+                    } else {
+                        if ($inStock == 'Stock-1') {
+                            $stock = $stock1 + $qty;
                             $field = 'cf_753';
-                        }elseif($inStock == 'Stock-2'){
+                        } elseif ($inStock == 'Stock-2') {
+                            $stock = $stock2 + $qty;
                             $field = 'cf_755';
-                        }else{
+                        } else {
+                            $stock = $stock3 + $qty;
                             $field = 'cf_757';
                         }
-                        $result = $db->pquery('SELECT '.$field.' FROM vtiger_productcf WHERE productid=?', array($productId));
-                        $_qty = $db->query_result($result,0,$field);
-                        $_qty = empty($_qty)?0:intval($_qty);
-                        $stock = $_qty + $qty;
-                        $db->pquery('UPDATE vtiger_productcf SET '.$field.'=? WHERE productid=?', array($stock, $productId));
+                        $db->pquery('UPDATE vtiger_productcf SET ' . $field . '=? WHERE productid=?', array($stock, $productId));
                     }
-                    if($outStock == 'Stock-0'){
-                        $result = $db->pquery("SELECT qtyinstock FROM vtiger_products WHERE productid=?", array($productId));
-                        $_qty = $db->query_result($result,0,"qtyinstock");
-                        $_qty = empty($_qty)?0:intval($_qty);
-                        $stock = $_qty - $qty;
-                        $db->pquery("UPDATE vtiger_products SET qtyinstock=? WHERE productid=?", array($stock, $productId));
-                    }else{
-                        if($inStock == 'Stock-1'){
+                    if ($outStock == 'Stock-0') {
+                        $stock = $stock0 - $qty;
+                        $db->pquery('UPDATE vtiger_products SET qtyinstock=? WHERE productid=?', array($stock, $productId));
+                    } else {
+                        if ($inStock == 'Stock-1') {
+                            $stock = $stock1 - $qty;
                             $field = 'cf_753';
-                        }elseif($inStock == 'Stock-2'){
+                        } elseif ($inStock == 'Stock-2') {
+                            $stock = $stock2 - $qty;
                             $field = 'cf_755';
-                        }else{
+                        } else {
+                            $stock = $stock3 - $qty;
                             $field = 'cf_757';
                         }
-                        $result = $db->pquery('SELECT '.$field.' FROM vtiger_productcf WHERE productid=?', array($productId));
-                        $_qty = $db->query_result($result,0,$field);
-                        $_qty = empty($_qty)?0:intval($_qty);
-                        $stock = $_qty - $qty;
-                        $db->pquery('UPDATE vtiger_productcf SET '.$field.'=? WHERE productid=?', array($stock, $productId));
+                        $db->pquery('UPDATE vtiger_productcf SET ' . $field . '=? WHERE productid=?', array($stock, $productId));
                     }
                 }
             }
