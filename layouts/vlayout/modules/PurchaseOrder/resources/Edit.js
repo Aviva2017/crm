@@ -162,7 +162,7 @@ Inventory_Edit_Js("PurchaseOrder_Edit_Js", {
         }
     },
 
-    tregisterEventForChangeType: function (formElement) {
+    registerEventForChangeType: function (formElement) {
         if (typeof formElement == 'undefined')
             var formElement = this.getForm();
 
@@ -260,7 +260,7 @@ Inventory_Edit_Js("PurchaseOrder_Edit_Js", {
 
     registerBasicEvents: function (container) {
         this._super(container);
-        this.tregisterEventForChangeType(container);
+        this.registerEventForChangeType(container);
         this.registerRecordPreSaveEvent(container);
     },
 
