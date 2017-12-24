@@ -86,7 +86,7 @@
              </td>
 			{/foreach}
 			<td>
-				<button class="btn" data-trigger="listSearch"><i class="icon icon-search"></i></button>
+				<button class="btn" data-trigger="listSearch">{vtranslate('LBL_SEARCH', $MODULE )}</button>
 			</td>
         </tr>
         {/if}

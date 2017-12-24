@@ -8,29 +8,11 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Products_RelationListView_Model extends Vtiger_RelationListView_Model {
+class Vendors_RelationListView_Model extends Vtiger_RelationListView_Model {
 
-	/**
-	 * Function to get the links for related list
-	 * @return <Array> List of action models <Vtiger_Link_Model>
-	 */
-	public function getLinks() {
-		$relationModel = $this->getRelationModel();
-		$parentModel = $this->getParentRecordModel();
-		
-		$isSubProduct = false;
-		if($parentModel->getModule()->getName() == $relationModel->getRelationModuleModel()->getName()) {
-			$isSubProduct = $relationModel->isSubProduct($parentModel->getId());
-		}
-		
-		if(!$isSubProduct){
-			return parent::getLinks();
-		}
-	}
-	
 	public function getHeaders() {
 		$headerFields = parent::getHeaders();
-		if($this->getRelationModel()->getRelationModuleModel()->getName() == 'PriceBooks') {
+		if($this->getRelationModel()->getRelationModuleModel()->getName() == 'Products') {
 			//Added to support Unit Price
 			$unitPriceField = new Vtiger_Field_Model();
 			$unitPriceField->set('name', 'unit_price');

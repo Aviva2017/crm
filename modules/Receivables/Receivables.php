@@ -30,14 +30,22 @@ class Receivables extends CRMEntity
     var $list_fields = Array(
         'Receivables No'=>Array('receivables'=>'receivables_no'),
         'Receivables Name'=>Array('receivables'=>'receivablesname'),
+        'Receivables Type' => Array('receivables' => 'receivablestype'),
         'Bank' => Array('receivables'=>'bank'),
-        'Assigned To'=>Array('vtiger_crmentity'=>'smownerid')
+        'Amount' => Array('receivables'=>'amount'),
+        'Status' => Array('receivablescf'=>'cf_780'),
+        'Assigned To'=>Array('vtiger_crmentity'=>'smownerid'),
+        'Created Time' => Array('vtiger_crmentity'=>'createdtime')
     );
     var $list_fields_name = Array(
         'Receivables No'=>'receivables_no',
         'Receivables Name'=>'receivablesname',
+        'Receivables Type'=> 'receivablestype',
         'Bank' => 'bank',
+        'Amount'=> 'amount',
+        'Status'=> 'cf_780',
         'Assigned To'=>'assigned_user_id',
+        'Created Time' => 'createdtime'
     );
 
     var $list_link_field= 'receivablesname';
@@ -46,11 +54,13 @@ class Receivables extends CRMEntity
         'Receivables No'=>Array('receivables'=>'receivables_no'),
         'Receivables Name'=>Array('receivables'=>'receivablesname'),
         'Assigned To'=>Array('vtiger_crmentity'=>'smownerid'),
+        'Created Time' => Array('vtiger_crmentity' => 'createdtime')
     );
     var $search_fields_name = Array(
         'Receivables No'=>'receivables_no',
         'Receivables Name'=>'receivablesname',
         'Assigned To'=>'assigned_user_id',
+        'Created Time' => 'createdtime'
     );
 
     var $required_fields = Array();
@@ -78,5 +88,58 @@ class Receivables extends CRMEntity
     function save_module($module)
     {
 
+    }
+
+    function isCheckByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $status = $recordModel->get('cf_780');
+
+        if (in_array($status, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isDeleteByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $status = $recordModel->get('cf_780');
+
+        if (in_array($status, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isEditByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $status = $recordModel->get('cf_780');
+
+        if (in_array($status, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isPermitted($module, $actionname, $recordId = '')
+    {
+        if ($actionname == 'EditView' || $actionname == 'Delete') {
+            if (!empty($recordId)) {
+                $recordModel = Vtiger_Record_Model::getInstanceById($recordId);
+                if($this->isCheckByStatus($recordModel)){
+                    return true;
+                }
+                return false;
+            }
+        }
+        return 'yes';
     }
 }

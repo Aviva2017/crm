@@ -39,6 +39,8 @@ $languageStrings = array(
 	'306-Internet Sales' => '306-网络销售',
 	'307-Service-Hardware Labor' => '307-服务-硬件人工',
 	'308-Sales-Books' => '308-销售-手册',
+
+    'Email'=> '邮箱',
 );
 
 $jsLanguageStrings = array(

@@ -75,11 +75,12 @@ Vtiger_Edit_Js("Accounts_Edit_Js",{
 		if(typeof form == 'undefined') {
 			form = this.getForm();
 		}
-		
+
 		form.on(Vtiger_Edit_Js.recordPreSave, function(e, data) {
 			var accountName = thisInstance.getAccountName(form);
 			var recordId = thisInstance.getRecordId(form);
 			var params = {};
+			console.log(thisInstance.duplicateCheckCache);
             if(!(accountName in thisInstance.duplicateCheckCache)) {
                 Vtiger_Helper_Js.checkDuplicateName({
                     'accountName' : accountName, 

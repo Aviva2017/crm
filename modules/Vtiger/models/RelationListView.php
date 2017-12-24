@@ -375,7 +375,7 @@ class Vtiger_RelationListView_Model extends Vtiger_Base_Model {
 		$parentModuleEntityIdField = $parentModuleModel->basetableid;
 		$parentRecordId = $this->getParentRecordModel()->getId();
 		$parentModuleDirectRelatedField = $parentModuleModel->get('directRelatedFieldName');
-		
+
 		$relatedModuleFields = array_keys($this->getHeaders());
 		$currentUserModel = Users_Record_Model::getCurrentUserModel();
 		$queryGenerator = new QueryGenerator($relatedModuleName, $currentUserModel);

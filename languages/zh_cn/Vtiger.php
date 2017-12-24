@@ -1378,7 +1378,16 @@ $languageStrings = array(
         //'LBL_LOGIN_DETAILS' => '登录信息' ,
         //'LBL_USERNAME' => '用户名',
         //'LBL_PASSWORD' => '密码',
-        //'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => '客户门户登录信息',	
+        //'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => '客户门户登录信息',
+
+
+    'Stock-0' => '一号仓库',
+    'Stock-1' => '二号仓库',
+    'Stock-2' => '三号仓库',
+    'Stock-3' => '四号仓库',
+
+    'China, Yuan Renminbi' => '人民币',
+    'Receivables' => '收/付款'
 );
 
 $jsLanguageStrings = array(

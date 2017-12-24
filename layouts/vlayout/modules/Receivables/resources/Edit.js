@@ -1,4 +1,44 @@
-Vtiger_Edit_Js("Receivables_Edit_Js", {}, {
+Vtiger_Edit_Js("Receivables_Edit_Js", {
+    Check: function (recordId) {
+        var message = app.vtranslate('LBL_CONFIRM RECEIPT');
+
+        Vtiger_Helper_Js.showConfirmationBox({'message': message}).then(
+            function (e) {
+                var progressMessage = app.vtranslate('LBL_CONFIRM RECEIPT');
+                var progressIndicatorElement = jQuery.progressIndicator({
+                    'message': progressMessage,
+                    'position': 'html',
+                    'blockInfo': {
+                        'enabled': true
+                    }
+                });
+
+                var url = 'index.php?module=Receivables&action=Check&record=' + recordId;
+                AppConnector.request(url).then(
+                    function (data) {
+                        progressIndicatorElement.progressIndicator({
+                            'mode': 'hide'
+                        });
+                        if (data.success) {
+                            if (typeof Vtiger_List_Js != 'undefined') {
+                                var listinstance = new Vtiger_List_Js();
+                                listinstance.getListViewRecords();
+                            } else {
+                                window.location.reload();
+                            }
+                        } else {
+                            var params = {
+                                text: app.vtranslate(data.error.message),
+                                title: app.vtranslate('JS_LBL_PERMISSION')
+                            }
+                            Vtiger_Helper_Js.showPnotify(params);
+                        }
+                    }
+                );
+            }
+        );
+    }
+}, {
     registerEventForChangeType: function (formElement) {
         if (typeof formElement == 'undefined')
             var formElement = this.getForm();

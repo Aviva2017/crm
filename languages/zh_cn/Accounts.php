@@ -37,7 +37,7 @@ $languageStrings = array(
 	'Other Email' => '备用 Email',
 	'Other Phone' => '备用电话',
 	'Phone' => '常用电话',
-	'Email' => '常用 Email',
+	'Email' => '常用邮箱',
 	'Type' => '类型',
 
 	//Added for existing picklist entries

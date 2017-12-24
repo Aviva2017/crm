@@ -44,7 +44,6 @@ $languageStrings = array(
 	//'Reorder Level'=>'Reorder Level',重复
 	//'Vendor PartNo'=>'Vendor Part No',重复
 	'Serial No'=>'序列号',
-	'Qty In Stock'=>'库存数量',
 	'Product Sheet'=>'产品说明',
 	'Qty In Demand'=>'需求数量',
 	'GL Account'=>'会计科目',
@@ -96,6 +95,12 @@ $languageStrings = array(
 	'LBL_UPDATE_BUNDLE_PRICE' => '更新捆绑产品价格',
 	'LBL_PRODUCT_NAME' => '产品名称',
 	'LBL_PRICE_QUANTITY' => '价格 x 数量',
+
+    'Qty In Stock'=>'一号仓库库存',
+    'Qty In Stock-1' => '二号仓库库存',
+    'Qty In Stock-2' => '三号仓库库存',
+    'Qty In Stock-3' => '四号仓库库存',
+    'Cost Price' => '采购成本价(￥)',
 );
 
 $jsLanguageStrings = array(

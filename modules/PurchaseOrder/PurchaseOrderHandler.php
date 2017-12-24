@@ -33,6 +33,7 @@ class PurchaseOrderHandler extends VTEventHandler {
         if ($eventName == 'vtiger.entity.aftersave') {
             if ($currentModule != 'PurchaseOrder')
                 return;
+            return '';
             $entityDelta = new VTEntityDelta();
             $oldCurrency = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'currency_id');
             $oldConversionRate = $entityDelta->getOldValue($entityData->getModuleName(), $entityData->getId(), 'conversion_rate');

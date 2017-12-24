@@ -51,7 +51,12 @@ $languageStrings = array(
 	'LBL_COMPANY_ADDRESS' => '公司地址',
 	'LBL_ACCOUNT_ADDRESS' => '客户地址',
 	'LBL_VENDOR_ADDRESS' => '供应商地址',
-	'LBL_CONTACT_ADDRESS' => '联系人地址'
+	'LBL_CONTACT_ADDRESS' => '联系人地址',
+
+    'Purchase Type' => '采购类型',
+    'In Stock' => '采购入库',
+    'Out Stock'=> '采购退货',
+    'Adjust Stock' => '调库',
 );
 
 $jsLanguageStrings = array(
