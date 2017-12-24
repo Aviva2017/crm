@@ -3,6 +3,7 @@
 out
 gen
 ./test
+.test/templates_c/*
 ./logs
 ./storage
 _config.inc.php
