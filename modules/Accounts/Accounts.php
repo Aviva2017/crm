@@ -687,7 +687,7 @@ class Accounts extends CRMEntity {
 
 		$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
 
-		$query = "SELECT vtiger_crmentity.*, vtiger_salesorder.*, vtiger_quotes.subject AS quotename, vtiger_account.accountname,
+		$query = "SELECT vtiger_crmentity.*, vtiger_salesorder.*, vtiger_salesordercf.*, vtiger_quotes.subject AS quotename, vtiger_account.accountname,
 				case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name
 				FROM vtiger_salesorder
 				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -896,10 +896,10 @@ class Accounts extends CRMEntity {
 						ON vtiger_users.id=vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_groups
 						ON vtiger_groups.groupid = vtiger_crmentity.smownerid 
-        	INNER JOIN vtiger_accounts ON vtiger_accounts.accountsid=vtiger_receivables.relation_id 
-        	WHERE vtiger_crmentity.deleted=0 AND vtiger_accounts.accountsid='.$id;
+        	INNER JOIN vtiger_account ON vtiger_account.accountid=vtiger_receivables.relation_id 
+        	WHERE vtiger_crmentity.deleted=0 AND vtiger_account.accountid='.$id;
 
-        $return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);
+        $return_value = GetRelatedList($this_module, $related_module, $other, $query, false, $returnset);
 
         if($return_value == null) $return_value = Array();
         $return_value['CUSTOM_BUTTON'] = $button;

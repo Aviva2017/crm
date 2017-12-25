@@ -22,7 +22,7 @@ class PurchaseOrder_DetailView_Model extends Inventory_DetailView_Model
         $moduleName = $moduleModel->getName();
         $recordId = $recordModel->getId();
 
-        $detailViewLink = array();
+        $detailViewLinks = array();
 
         $moduleFocus = CRMEntity::getInstance($moduleName);
         if ($moduleFocus->isCheckByStatus($recordModel)) {

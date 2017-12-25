@@ -59,6 +59,7 @@ class SalesOrder extends CRMEntity {
 				'Account Name'=>Array('account'=>'accountid'),
 				'Quote Name'=>Array('quotes'=>'quoteid'),
 				'Total'=>Array('salesorder'=>'total'),
+				'SalesOrder Type' => Array('salesordercf'=>'cf_782'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 
@@ -67,7 +68,8 @@ class SalesOrder extends CRMEntity {
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id',
-					'Total'=>'hdnGrandTotal',
+						'Total'=>'hdnGrandTotal',
+				        'SalesOrder Type' => 'cf_782',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
@@ -603,6 +605,59 @@ class SalesOrder extends CRMEntity {
                 $whereClause .
                 " ORDER BY $tableColumnsString," . $this->table_name . "." . $this->table_index . " ASC";
         return $query;
+    }
+
+    function isCheckByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $sostatus = $recordModel->get('sostatus');
+
+        if (in_array($sostatus, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isDeleteByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $sostatus = $recordModel->get('sostatus');
+
+        if (in_array($sostatus, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isEditByStatus($recordModel)
+    {
+        if (empty($recordModel))
+            return false;
+
+        $sostatus = $recordModel->get('sostatus');
+
+        if (in_array($sostatus, array('Created')))
+            return true;
+
+        return false;
+    }
+
+    function isPermitted($module, $actionname, $recordId = '')
+    {
+        if ($actionname == 'EditView' || $actionname == 'Delete') {
+            if (!empty($recordId)) {
+                $recordModel = Inventory_Record_Model::getInstanceById($recordId);
+                if($this->isCheckByStatus($recordModel)){
+                    return true;
+                }
+                return false;
+            }
+        }
+        return 'yes';
     }
 
 }
