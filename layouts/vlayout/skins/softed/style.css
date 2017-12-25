@@ -1018,6 +1018,9 @@ li.ui-timepicker-selected,
 .detailViewContainer {
   padding: 0 20px;
 }
+.detailViewContainer .detailview-table a {
+  color: #0088cc;
+}
 .userPreferences .contents {
   padding-left: 0 !important;
 }
