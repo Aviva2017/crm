@@ -69,6 +69,13 @@ $languageStrings = array(
     'Net 45 days' => '45 天',
     'Net 60 days' => '60 天',
 	'Cancel'=>'已取消',
+
+    'SalesOrder Type' => '订单类型',
+    'Warehouse' => '仓库',
+    'Selling' => '销售订单',
+    'Refund' => '销售退货',
+
+    'LBL_IMPORT_FROM_SUPPORTED_FILE_TYPES' => '支持的文件类型：.XLS,.XLSX'
 );
 
 $jsLanguageStrings = array(
